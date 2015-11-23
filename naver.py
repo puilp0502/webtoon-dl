@@ -8,7 +8,8 @@ def download_file(url, foldername, referer):
     filename = os.path.basename(url)
     headers = {'Referer': referer}
     req = requests.get(url, headers = headers)
-    with open(foldername+"\\"+filename, "wb") as image:
+    print(foldername+"/"+filename)
+    with open(foldername+"/"+filename, "wb") as image:
         for chunk in req.iter_content(128):
             image.write(chunk)
     
@@ -38,7 +39,7 @@ while True:
         #print("URL: %s"%detail_url)
         for image_url in parse_img(readhtml(detail_url)):
             print("  Downloading file %s"%os.path.basename(image_url))
-            download_file(image_url, str(titleId)+"\\"+str(episode),detail_url)
+            download_file(image_url, str(titleId)+"/"+str(episode),detail_url)
     except ConnectionRefusedError:
         print("\nEnd of comic")
         break
