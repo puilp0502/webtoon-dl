@@ -55,8 +55,8 @@ while True:
         print("Episode %d"%episode)
         #print("URL: %s"%detail_url)
         html_data = readhtml(detail_url)
-        author_id = re.findall(r'<span class="wrt_nm">(.+?)</span>', html_data)[0].replace('/', '&')
-        comic_name= re.findall(r'<h2>(.+?)<span class="wrt_nm">', html_data)[0].replace('/', ' ')
+        author_id = re.findall(r'<span class="wrt_nm">(.+?)</span>', html_data)[0].replace('/', '&').strip()
+        comic_name= re.findall(r'<h2>(.+?)<span class="wrt_nm">', html_data)[0].replace('/', ' ').strip()
 
         print("Downloading "+author_id + "'s " + comic_name)
         imglist = parse_img(html_data)
