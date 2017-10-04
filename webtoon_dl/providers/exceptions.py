@@ -1,0 +1,2 @@
+class EndOfComic(Exception):
+    pass
