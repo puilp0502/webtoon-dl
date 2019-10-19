@@ -8,9 +8,9 @@ from webtoon_dl.utils import sanitize_filename
 
 
 _image_list_pattern = re.compile(
-    r'(http://imgcomic.naver.net/webtoon/\d+/\d+/.+?\.(?:jpg|png|gif|bmp|JPG|PNG|GIF|BMP))')
+    r'(https?://(imgcomic.naver.net|image-comic.pstatic.net)/webtoon/\d+/\d+/.+?\.(?:jpg|png|gif|bmp|JPG|PNG|GIF|BMP))')
 _next_episode_pattern = re.compile(
-    r"clickcr\(.+'con\.next'.+\);return checkServiceCode\('remoteCtr','.+?','(\d+)'")
+    r"nclk_v2\(.+'con\.next'.?\);return checkServiceCode\('remoteCtr','.+?','(\d+)'")
 _episode_name_pattern = re.compile(r'<h3>(.+?)</h3>')
 _base_url = ""
 _title_id = 0
@@ -29,7 +29,7 @@ def get_image_list(src):
     :src:
         A HTML source.
     """
-    img_list = re.findall(_image_list_pattern, src)
+    img_list = map(lambda m: m[0], re.findall(_image_list_pattern, src))
     return img_list
 
 

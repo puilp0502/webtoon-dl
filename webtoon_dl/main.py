@@ -60,13 +60,12 @@ def find_provider(url):
 
 @click.command()
 @click.option('--count', '-c', default=0, help='Episodes to download. Unlimited if 0.')
-@click.option('--url', '-u', prompt='Enter URL',
-              help="The url of the comic's episode. Downloads from this episode up to COUNT episode.")
 @click.option('-j', default=8, help='Maximum count of threads.')
 @click.option('--dest', '-d', type=click.Path(), default='.',
               help='Path to directory to download comic. Defaults to current directory.')
 @click.option('--verbosity', default=1, type=click.IntRange(min=0, max=2, clamp=True),
               help='Verbosity, 0 to 2. Defaults to 1')
+@click.argument('url')
 def main(count, url, j, dest, verbosity):
     """
     A blazing fast webtoon downloader.
@@ -88,12 +87,16 @@ def main(count, url, j, dest, verbosity):
     current = 1
     html_src = requests.get(episode_url).text  # TODO: Custom header & cookie
     provider.initialize(url)
-    dirname = dest + '/' + provider.get_dirname(html_src)
+
+    dirname = os.path.join(dest, provider.get_dirname(html_src))
+
     req_header = provider.build_header(html_src, episode_url)
     ep_name = sanitize_filename(provider.get_episode_name(html_src))
+    
     q.put((ep_name, dirname + ep_name, req_header, provider.get_image_list(html_src)))
     logger.debug("Dirname: " + dirname)
     logger.info("Downloading to: %s", os.path.normpath(dirname))
+    
     while not current == count:
         try:
             logger.debug("Enqueued %s" % ep_name)
